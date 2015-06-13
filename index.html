@@ -2,11 +2,26 @@
 <HTML>
 
 <HEAD>
+    <title>rebbot</title>
     <meta content="text/html" charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <style type="text/css">
+        body {
+            margin: 0px;
+        }
+        
+        #box {
+            position: absolute;
+            text-align: center;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
         .balloon {
+            margin-left: auto;
+            margin-right: auto;
             font-size: 20px;
+            width: 90%;
             color: #FFFFFF;
             padding: 10px;
             position: relative;
@@ -171,13 +186,15 @@
     </Script>
 
     <BODY>
-        reddit id:
-        <input type="text" id="user" value="kurehajime">
-        <input type="button" id="reddit_btn" value="generate">
-        <div class="balloon">
-            <div id="talk"></div>
+        <div id="box">
+            reddit id:
+            <input type="text" id="user" value="kurehajime">
+            <input type="button" id="reddit_btn" value="generate">
+            <div class="balloon">
+                <div id="talk"></div>
+            </div>
+            <IMG src="img/snoo.png" id="reddit_icon">
         </div>
-        <IMG src="img/snoo.png" id="reddit_icon">
     </BODY>
 
 </HTML>
