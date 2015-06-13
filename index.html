@@ -17,9 +17,14 @@
             width: 100%;
         }
         
+        #user {
+            font-size: 20px;
+        }
+        
         .balloon {
             margin-left: auto;
             margin-right: auto;
+            margin-top: 10px;
             font-size: 20px;
             width: 90%;
             color: #FFFFFF;
@@ -179,7 +184,10 @@
 
             getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
             segmenter = new TinySegmenter(); // インスタンス生成
-            $("#reddit_btn").click(function (e) {
+            $("#reddit_icon").click(function (e) {
+                $("#talk")[0].innerHTML = makeWord(reddit_comments);
+            })
+            $("#balloon").click(function (e) {
                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
             })
             $("#user").click(function (e) {
@@ -192,8 +200,7 @@
         <div id="box">
             reddit id:
             <input type="text" id="user" value="kurehajime">
-            <input type="button" id="reddit_btn" value="generate">
-            <div class="balloon">
+            <div class="balloon" id="balloon">
                 <div id="talk"></div>
             </div>
             <IMG src="img/snoo.png" id="reddit_icon">
