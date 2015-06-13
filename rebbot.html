@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<HTML>
+
+<HEAD>
+    <meta content="text/html" charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <style type="text/css">
+        .balloon {
+            font-size: 20px;
+            color: #FFFFFF;
+            padding: 10px;
+            position: relative;
+            height: 60px;
+            background-color: #3ADF00;
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 7px;
+            -webkit-border-radius: 7px;
+            -moz-border-radius: 7px;
+        }
+        
+        .balloon:before {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            margin-left: -10px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid #3ADF00;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+        }
+        
+        #talk {
+            position: absolute;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+        }
+        
+        #reddit_icon {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="jscss/tiny_segmenter-0.1.js" charset="UTF-8">
+    </script>
+    <Script>
+        var segmenter;
+        var reddit_comments = "";
+
+        function getRedditFeed(url) {
+            $.getJSON(
+                url,
+                function getfeed(data) {
+                    var comments = "";
+                    for (var i = 0; i < data.data.children.length; i++) {
+                        var c = data.data.children[i].data.body;
+                        comments += c + "\n";
+                    }
+                    reddit_comments = comments;
+                    $("#talk")[0].innerHTML = makeWord(comments);
+                }
+            ).success(function () {
+                //none;
+            }).error(function () {
+                alert("no sub reddit")
+            });
+        }
+
+        function makeWord(wkIn) {
+                var segs = segmenter.segment(wkIn);
+                var dict = makeDic(wkIn)
+                var wkbest = shuffleWord(dict);
+                for (var i = 0; i <= 10; i++) {
+                    wkOut = shuffleWord(dict).replace(/\n/g, "");
+                    if (Math.abs(40 - wkOut.length) < Math.abs(40 - wkbest.length)) {
+                        wkbest = wkOut
+                    }
+                }
+
+                return wkbest;
+
+            }
+            //文章をシャッフル
+        function shuffleWord(wkDic) {
+                var wkNowWord = ""
+                var wkStr = ""
+                wkNowWord = wkDic["_BOS_"][Math.floor(Math.random() * wkDic["_BOS_"].length)];
+                wkStr += wkNowWord;
+                while (wkNowWord != "_EOS_") {
+                    wkNowWord = wkDic[wkNowWord][Math.floor(Math.random() * wkDic[wkNowWord].length)];
+                    wkStr += wkNowWord;
+                }
+                wkStr = wkStr.replace(/_EOS_$/, "。")
+                return wkStr;
+            }
+            //辞書に追加
+        function makeDic(wkStr) {
+                wkStr = nonoise(wkStr);
+                var wkLines = wkStr.split("。");
+                var wkDict = new Object();
+                for (var i = 0; i <= wkLines.length - 1; i++) {
+                    var wkWords = segmenter.segment(wkLines[i]);
+                    if (!wkDict["_BOS_"]) {
+                        wkDict["_BOS_"] = new Array();
+                    }
+                    if (wkWords[0]) {
+                        wkDict["_BOS_"].push(wkWords[0])
+                    }; //文頭
+
+                    for (var w = 0; w <= wkWords.length - 1; w++) {
+                        var wkNowWord = wkWords[w]; //今の単語
+                        var wkNextWord = wkWords[w + 1]; //次の単語
+                        if (wkNextWord == undefined) { //文末
+                            wkNextWord = "_EOS_"
+                        }
+                        if (!wkDict[wkNowWord]) {
+                            wkDict[wkNowWord] = new Array();
+                        }
+                        wkDict[wkNowWord].push(wkNextWord);
+                        if (wkNowWord == "、") { //「、」は文頭として使える。
+                            wkDict["_BOS_"].push(wkNextWord);
+                        }
+                    }
+                }
+                return wkDict;
+            }
+            //ノイズ除去
+        function nonoise(wkStr) {
+            wkStr = wkStr.replace(/\n/g, "。");
+            wkStr = wkStr.replace(/[\?\!？！]/g, "。");
+            wkStr = wkStr.replace(/[-|｜:：・]/g, "。");
+            wkStr = wkStr.replace(/[「」（）\(\)\[\]【】]/g, " ");
+            return wkStr;
+        }
+
+        function getParam() {
+            var obj = new Object();
+            if (1 < document.location.search.length) {
+                var paramstr = document.location.search.substring(1).split('&');
+                for (var i = 0; i < paramstr.length; i++) {
+                    var entry = paramstr[i].split('=');
+                    var key = decodeURIComponent(entry[0]);
+                    var value = decodeURIComponent(entry[1]);
+                    obj[key] = decodeURIComponent(value);
+                }
+            }
+            return obj;
+        }
+
+        $(function () {
+            var param = getParam()
+            if (param && param["u"]) {
+                $("#user").val(param["u"]);
+            }
+
+            getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+            segmenter = new TinySegmenter(); // インスタンス生成
+            $("#reddit_btn").click(function (e) {
+                $("#talk")[0].innerHTML = makeWord(reddit_comments);
+            })
+
+        });
+    </Script>
+
+    <BODY>
+        reddit id:
+        <input type="text" id="user" value="kurehajime">
+        <input type="button" id="reddit_btn" value="generate">
+        <div class="balloon">
+            <div id="talk"></div>
+        </div>
+        <IMG src="img/snoo.png" id="reddit_icon">
+    </BODY>
+
+</HTML>
