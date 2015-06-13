@@ -76,6 +76,7 @@
                     var comments = "";
                     for (var i = 0; i < data.data.children.length; i++) {
                         var c = data.data.children[i].data.body;
+                        c = c.replace(/http.*\s/g, "");
                         c = c.replace(/http.*\n/g, "");
                         comments += c;
                     }
@@ -85,7 +86,7 @@
             ).success(function () {
                 //none;
             }).error(function () {
-                alert("no sub reddit")
+                alert("no reddit user id")
             });
         }
 
@@ -181,7 +182,9 @@
             $("#reddit_btn").click(function (e) {
                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
             })
-
+            $("#user").click(function (e) {
+                getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+            })
         });
     </Script>
 
