@@ -25,6 +25,7 @@
             margin-left: auto;
             margin-right: auto;
             margin-top: 10px;
+            overflow: hidden;
             font-size: 20px;
             width: 90%;
             color: #FFFFFF;
@@ -57,6 +58,7 @@
             height: 50px;
             line-height: 50px;
             text-align: center;
+            overflow: hidden;
         }
         
         #reddit_icon {
@@ -181,8 +183,9 @@
             if (param && param["u"]) {
                 $("#user").val(param["u"]);
             }
-
-            getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+            if ($("#user")[0].value !== "") {
+                getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+            }
             segmenter = new TinySegmenter(); // インスタンス生成
             $("#reddit_icon").click(function (e) {
                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
@@ -190,8 +193,11 @@
             $("#balloon").click(function (e) {
                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
             })
-            $("#user").click(function (e) {
-                getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+
+            $("#user").change(function (e) {
+                if ($("#user")[0].value !== "") {
+                    getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+                }
             })
         });
     </Script>
