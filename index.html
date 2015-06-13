@@ -177,6 +177,11 @@
             return obj;
         }
 
+        function changeUser() {
+            var file = document.location.href.split("?")[0];
+            file = file.split("/")[file.split("/").length - 1];
+            window.history.pushState(null, null, file + "?u=" + $("#user")[0].value);
+        }
         $(function () {
             var param = getParam()
             if (param && param["u"]) {
@@ -196,8 +201,9 @@
             $("#user").change(function (e) {
                 if ($("#user")[0].value !== "") {
                     getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
+                    changeUser();
                 }
-            })
+            });
         });
     </Script>
 
