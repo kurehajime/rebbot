@@ -87,7 +87,7 @@
                         comments += c;
                     }
                     reddit_comments = comments;
-                    $("#talk")[0].innerHTML = makeWord(comments);
+                    $("#talk")[0].innerHTML = makeWord(comments).replace("。", ".");
                 }
             ).success(function () {
                 //none;
@@ -182,6 +182,8 @@
             file = file.split("/")[file.split("/").length - 1];
             window.history.pushState(null, null, file + "?u=" + $("#user")[0].value);
         }
+
+
         $(function () {
             var param = getParam()
             if (param && param["u"]) {
@@ -200,10 +202,12 @@
 
             $("#user").change(function (e) {
                 if ($("#user")[0].value !== "") {
+                    $("#talk")[0].innerHTML = "...";
                     getRedditFeed("https://www.reddit.com/user/" + $("#user")[0].value + "/comments/.json?limit=77");
                     changeUser();
                 }
             });
+
         });
     </Script>
 
@@ -212,7 +216,7 @@
             reddit id:
             <input type="text" id="user" value="kurehajime">
             <div class="balloon" id="balloon">
-                <div id="talk"></div>
+                <div id="talk">...</div>
             </div>
             <IMG src="img/snoo.png" id="reddit_icon">
         </div>
