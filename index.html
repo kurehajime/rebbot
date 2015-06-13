@@ -48,7 +48,7 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script type="text/javascript" src="jscss/tiny_segmenter-0.1.js" charset="UTF-8">
+    <script type="text/javascript" src="jscss/tiny_segmenter-0.2.js" charset="UTF-8">
     </script>
     <Script>
         var segmenter;
@@ -61,7 +61,8 @@
                     var comments = "";
                     for (var i = 0; i < data.data.children.length; i++) {
                         var c = data.data.children[i].data.body;
-                        comments += c + "\n";
+                        c = c.replace(/http.*\n/g, "");
+                        comments += c;
                     }
                     reddit_comments = comments;
                     $("#talk")[0].innerHTML = makeWord(comments);
