@@ -149,7 +149,7 @@
                         if (wkNextWord == undefined) { //文末
                             wkNextWord = "_EOS_"
                         }
-                        if (!wkDict[wkNowWord]) {
+                        if (!wkDict[wkNowWord]|| typeof(wkDict[wkNowWord])=="function") {
                             wkDict[wkNowWord] = new Array();
                         }
                         wkDict[wkNowWord].push(wkNextWord);
