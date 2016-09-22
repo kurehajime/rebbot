@@ -211,11 +211,20 @@
                     changeUser();
                 }
             });
+            $(".balloon").touchstart(function(){
+                stop=true;
+            }).touchend(function(){
+                setTimeout(function(){
+                    stop=false;
+                },3000)
+            });
             $(".balloon").mouseover(function(){
                 stop=true;
             }).mouseout(function(){
                 stop=false;
             });
+
+
             setInterval(function(){
                 if(stop==false){
                      $("#talk")[0].innerHTML = makeWord(reddit_comments);
