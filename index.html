@@ -80,6 +80,7 @@
     <Script>
         var segmenter;
         var reddit_comments = "";
+        var stop=false;
 
         function getRedditFeed(url) {
             $.getJSON(
@@ -210,9 +211,15 @@
                     changeUser();
                 }
             });
-
+            $(".balloon").mouseover(function(){
+                stop=true;
+            }).mouseout(function(){
+                stop=false;
+            });
             setInterval(function(){
-                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
+                if(stop==false){
+                     $("#talk")[0].innerHTML = makeWord(reddit_comments);
+                }
             },5000);
 
         });
