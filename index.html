@@ -202,9 +202,6 @@
             $("#reddit_icon").click(function (e) {
                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
             })
-            $("#balloon").click(function (e) {
-                $("#talk")[0].innerHTML = makeWord(reddit_comments);
-            })
 
             $("#user").change(function (e) {
                 if ($("#user")[0].value !== "") {
@@ -213,7 +210,7 @@
                     changeUser();
                 }
             });
-            
+
             setInterval(function(){
                  $("#talk")[0].innerHTML = makeWord(reddit_comments);
             },5000);
