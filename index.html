@@ -213,6 +213,10 @@
                     changeUser();
                 }
             });
+            
+            setInterval(function(){
+                 $("#talk")[0].innerHTML = makeWord(reddit_comments);
+            },5000);
 
         });
     </Script>
