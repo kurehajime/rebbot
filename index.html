@@ -211,13 +211,15 @@
                     changeUser();
                 }
             });
-            $(".balloon").touchstart(function(){
+            $('.balloon').on('touchstart', function(){
                 stop=true;
-            }).touchend(function(){
-                setTimeout(function(){
+            });
+            $('.balloon').on('touchend', function(){
+                setTimeout(
+                    function(){
                     stop=false;
                 },3000)
-            });
+           });
             $(".balloon").mouseover(function(){
                 stop=true;
             }).mouseout(function(){
